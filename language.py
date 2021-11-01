@@ -46,7 +46,12 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def buildVocabulary(corpus):
-    return
+    newlst=[]
+    for line in corpus:
+        for each in line:
+            if(each not in newlst):
+                newlst.append(each)
+    return newlst
 
 
 '''
