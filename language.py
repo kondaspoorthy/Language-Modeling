@@ -179,7 +179,20 @@ Parameters: int ; list of strs ; list of floats ; list of strs
 Returns: dict mapping strs to floats
 '''
 def getTopWords(count, words, probs, ignoreList):
-    return
+    dict={}
+    dict1={}
+    for i in range(0,len(words)):
+        dict[words[i]]=probs[i]
+    while(len(dict1)!=count):
+        large=0
+        for each in dict:
+            if each not in ignoreList:
+                if(dict[each]>large and each not in dict1):
+                    large=dict[each]
+                    key=each
+        dict1[key]=large
+    return dict1
+    
 
 
 '''
@@ -190,6 +203,7 @@ Returns: str
 '''
 from random import choices
 def generateTextFromUnigrams(count, words, probs):
+
     return
 
 
@@ -345,10 +359,10 @@ def scatterPlot(xs, ys, labels, title):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
+    '''print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
     test.week1Tests()
     print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
-    test.runWeek1()
+    test.runWeek1()'''
 
     ## Uncomment these for Week 2 ##
 
