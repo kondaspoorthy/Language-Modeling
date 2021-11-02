@@ -17,8 +17,14 @@ Parameters: str
 Returns: 2D list of strs
 '''
 def loadBook(filename):
-    return
-
+    lst=[]
+    file=open(filename,"r")
+    book=file.readlines()
+    for line in book:
+        innerlst=line.split()
+        if innerlst!=[]:
+            lst.append(innerlst)
+    return lst
 
 '''
 getCorpusLength(corpus)
@@ -27,7 +33,10 @@ Parameters: 2D list of strs
 Returns: int
 '''
 def getCorpusLength(corpus):
-    return
+    count=0
+    for line in corpus:
+        count+=len(line)
+    return count
 
 
 '''
@@ -37,7 +46,12 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def buildVocabulary(corpus):
-    return
+    newlst=[]
+    for line in corpus:
+        for each in line:
+            if(each not in newlst):
+                newlst.append(each)
+    return newlst
 
 
 '''
@@ -47,7 +61,13 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to ints
 '''
 def countUnigrams(corpus):
-    return
+    dict={}
+    for line in corpus:
+        for word in line:
+            if word not in dict:
+                dict[word]=0
+            dict[word]+=1
+    return dict
 
 
 '''
@@ -57,7 +77,11 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def getStartWords(corpus):
-    return
+    words=[]
+    for line in corpus:
+        if line[0] not in words:
+            words.append(line[0])
+    return words
 
 
 '''
@@ -67,7 +91,12 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to ints
 '''
 def countStartWords(corpus):
-    return
+    dict={}
+    for line in corpus:
+        if line[0] not in dict:
+            dict[line[0]]=0
+        dict[line[0]]+=1
+    return dict
 
 
 '''
@@ -77,7 +106,16 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to (dicts mapping strs to ints)
 '''
 def countBigrams(corpus):
-    return
+    dict={}
+    for sentence in corpus:
+        for i in range(0,len(sentence)-1):
+            if sentence[i] not in dict:
+                dict[sentence[i]]={}
+            if sentence[i+1] not in dict[sentence[i]]:
+                dict[sentence[i]][sentence[i+1]]=0
+            dict[sentence[i]][sentence[i+1]]+=1
+
+    return dict
 
 
 ### WEEK 2 ###
