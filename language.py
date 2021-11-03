@@ -17,8 +17,14 @@ Parameters: str
 Returns: 2D list of strs
 '''
 def loadBook(filename):
-    return
-
+    lst=[]
+    file=open(filename,"r")
+    book=file.readlines()
+    for line in book:
+        innerlst=line.split()
+        if innerlst!=[]:
+            lst.append(innerlst)
+    return lst
 
 '''
 getCorpusLength(corpus)
@@ -27,7 +33,10 @@ Parameters: 2D list of strs
 Returns: int
 '''
 def getCorpusLength(corpus):
-    return
+    count=0
+    for line in corpus:
+        count+=len(line)
+    return count
 
 
 '''
@@ -37,7 +46,12 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def buildVocabulary(corpus):
-    return
+    newlst=[]
+    for line in corpus:
+        for each in line:
+            if(each not in newlst):
+                newlst.append(each)
+    return newlst
 
 
 '''
@@ -47,7 +61,13 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to ints
 '''
 def countUnigrams(corpus):
-    return
+    dict={}
+    for line in corpus:
+        for word in line:
+            if word not in dict:
+                dict[word]=0
+            dict[word]+=1
+    return dict
 
 
 '''
@@ -57,7 +77,11 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def getStartWords(corpus):
-    return
+    words=[]
+    for line in corpus:
+        if line[0] not in words:
+            words.append(line[0])
+    return words
 
 
 '''
@@ -67,7 +91,12 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to ints
 '''
 def countStartWords(corpus):
-    return
+    dict={}
+    for line in corpus:
+        if line[0] not in dict:
+            dict[line[0]]=0
+        dict[line[0]]+=1
+    return dict
 
 
 '''
@@ -77,7 +106,16 @@ Parameters: 2D list of strs
 Returns: dict mapping strs to (dicts mapping strs to ints)
 '''
 def countBigrams(corpus):
-    return
+    dict={}
+    for sentence in corpus:
+        for i in range(0,len(sentence)-1):
+            if sentence[i] not in dict:
+                dict[sentence[i]]={}
+            if sentence[i+1] not in dict[sentence[i]]:
+                dict[sentence[i]][sentence[i+1]]=0
+            dict[sentence[i]][sentence[i+1]]+=1
+
+    return dict
 
 
 ### WEEK 2 ###
@@ -89,7 +127,10 @@ Parameters: list of strs
 Returns: list of floats
 '''
 def buildUniformProbs(unigrams):
-    return
+    newlst=[]
+    for i in range(0,len(unigrams)):
+        newlst.append(1/len(unigrams))
+    return newlst
 
 
 '''
@@ -99,7 +140,15 @@ Parameters: list of strs ; dict mapping strs to ints ; int
 Returns: list of floats
 '''
 def buildUnigramProbs(unigrams, unigramCounts, totalCount):
-    return
+    prob=[]
+    for each in unigrams:
+        if each not in unigramCounts:
+            prob.append(0)
+        else:
+            score=unigramCounts[each]/totalCount
+            prob.append(score)
+    return prob
+
 
 
 '''
@@ -109,7 +158,18 @@ Parameters: dict mapping strs to ints ; dict mapping strs to (dicts mapping strs
 Returns: dict mapping strs to (dicts mapping strs to (lists of values))
 '''
 def buildBigramProbs(unigramCounts, bigramCounts):
-    return
+    dict={}
+    for prevWord in bigramCounts:
+        dict[prevWord]={ }
+        wordlst=[]
+        problst=[]
+        for each in bigramCounts[prevWord]:
+            wordlst.append(each)
+            prob=bigramCounts[prevWord][each]/unigramCounts[prevWord]
+            problst.append(prob)
+        dict[prevWord]["words"]=wordlst
+        dict[prevWord]['probs']=problst
+    return dict
 
 
 '''
@@ -119,7 +179,20 @@ Parameters: int ; list of strs ; list of floats ; list of strs
 Returns: dict mapping strs to floats
 '''
 def getTopWords(count, words, probs, ignoreList):
-    return
+    dict={}
+    dict1={}
+    for i in range(0,len(words)):
+        dict[words[i]]=probs[i]
+    while(len(dict1)!=count):
+        large=0
+        for each in dict:
+            if each not in ignoreList:
+                if(dict[each]>large and each not in dict1):
+                    large=dict[each]
+                    key=each
+        dict1[key]=large
+    return dict1
+    
 
 
 '''
@@ -130,7 +203,14 @@ Returns: str
 '''
 from random import choices
 def generateTextFromUnigrams(count, words, probs):
-    return
+    count1=0
+    str=""
+    while(count1!=count):
+        lst=choices(words,weights=probs)
+        str=str+lst[0]
+        str=str+" "
+        count1+=1
+    return str
 
 
 '''
@@ -285,18 +365,17 @@ def scatterPlot(xs, ys, labels, title):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
+    '''print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
     test.week1Tests()
     print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
-    test.runWeek1()
+    test.runWeek1()'''
 
     ## Uncomment these for Week 2 ##
-"""
+
     print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
     test.week2Tests()
     print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
     test.runWeek2()
-"""
 
     ## Uncomment these for Week 3 ##
 """
