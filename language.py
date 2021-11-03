@@ -5,6 +5,8 @@ Roll No:
 """
 
 import language_tests as test
+import matplotlib
+import numpy
 
 project = "Language" # don't edit this
 
