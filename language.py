@@ -307,7 +307,43 @@ Parameters: 2D list of strs ; 2D list of strs ; int
 Returns: dict mapping strs to (lists of values)
 '''
 def setupChartData(corpus1, corpus2, topWordCount):
-    return
+    unique1=buildVocabulary(corpus1)
+    unique1count=countUnigrams(corpus1)
+    length1=getCorpusLength(corpus1)
+    prob1=buildUnigramProbs(unique1,unique1count,length1)
+    dict1=getTopWords(topWordCount,unique1,prob1,ignore)
+    unique2=buildVocabulary(corpus2)
+    unique2count=countUnigrams(corpus2)
+    length2=getCorpusLength(corpus2)
+    prob2=buildUnigramProbs(unique2,unique2count,length2)
+    dict2=getTopWords(topWordCount,unique2,prob2,ignore)
+    lst1=list(dict1.keys())
+    lst2=list(dict2.keys())
+    newlst=lst1[:]
+    for val in lst2:
+        if val not in lst1:
+            newlst.append(val)
+    #corpus1prob=list(dict1.values())
+    #corpus2prob=list(dict2.values())
+    newdict={}
+    newdict["corpus1Probs"]=[]
+    newdict["corpus2Probs"]=[]
+
+    for val1 in newlst:
+        if val1 in lst1:
+            newdict["corpus1Probs"].append(dict1[val1])
+        else:
+            newdict["corpus1Probs"].append(0)
+    for val2 in newlst:
+        if val2 in lst2:
+            newdict["corpus2Probs"].append(dict2[val2])
+        else:
+            newdict["corpus2Probs"].append(0)
+    #print(newdict["corpus1Probs"])
+    #print(newdict["corpus2Probs"])
+    newdict["topWords"]=newlst
+    
+    return newdict
 
 
 '''
@@ -317,6 +353,8 @@ Parameters: 2D list of strs ; str ; 2D list of strs ; str ; int ; str
 Returns: None
 '''
 def graphTopWordsSideBySide(corpus1, name1, corpus2, name2, numWords, title):
+    dict=setupChartData(corpus1,corpus2,numWords)
+    sideBySideBarPlots(dict["topWords"],dict["corpus1Probs"],dict["corpus2Probs"],name1,name2,"Probabilities across 2 books")
     return
 
 
@@ -327,6 +365,8 @@ Parameters: 2D list of strs ; 2D list of strs ; int ; str
 Returns: None
 '''
 def graphTopWordsInScatterplot(corpus1, corpus2, numWords, title):
+    dict=setupChartData(corpus1,corpus2,numWords)
+    scatterPlot(dict["corpus1Probs"],dict["corpus2Probs"],dict["topWords"],"Probabilities of two books")
     return
 
 
